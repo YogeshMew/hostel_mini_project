@@ -8,6 +8,9 @@ import BadgeRoundedIcon from '@mui/icons-material/BadgeRounded';
 
 export const Adminhome = () => {
     const { state, dispatch } = useContext(noteContext);
+      useEffect(()=>{
+    document.title = "HOSTEL4U";
+    },[]);
 
 
   const navigate = useNavigate();

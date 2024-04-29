@@ -17,7 +17,7 @@ export const About = () => {
       <br />
       <br />
       <button onClick={handleClick}>Change true</button>
-      <button onClick={fandleClick}>Cha false</button>
+      <button onClick={fandleClick}>Change false</button>
     </div>
     </>
   )

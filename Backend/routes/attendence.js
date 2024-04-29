@@ -15,6 +15,7 @@ const mongoose = require("mongoose");
 const connection = require("../db");
 const axios=require('axios');
 const attend = require('../models/attend');
+let gridfsBucket;
 
 // route 1 : to mark the attendance 
 router.post('/attend', fetchuser, attendance_upload.single("file"),async (req,res)=>{

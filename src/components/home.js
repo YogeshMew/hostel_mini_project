@@ -13,7 +13,6 @@ import AccountBalanceRoundedIcon from "@mui/icons-material/AccountBalanceRounded
 import PointOfSaleRoundedIcon from "@mui/icons-material/PointOfSaleRounded";
 
 import FoodBankRoundedIcon from "@mui/icons-material/FoodBankRounded";
-import MessDetails from "./messdetails";
 export const Home = () => {
   const { state, dispatch } = useContext(noteContext);
   const [count, setCount] = useState(0);
@@ -25,10 +24,42 @@ export const Home = () => {
   const [sname, setsname] = useState();
   const [roombook_alert, setroombook_alert] = useState("displaynone");
   const [roombook_grid, setroombook_grid] = useState("displaynone");
+  const [previousBill, setPreviousBill] = useState("");
+  const [currentBalance, setCurrentBalance] = useState("");
+  const [currentMonthBill, setCurrentMonthBill] = useState("");
+  const [nextMonthPrediction, setNextMonthPrediction] = useState("");
+  const [feedbackMessage, setFeedbackMessage] = useState("");
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+
+    // Send form data to Flask backend
+    fetch('http://localhost:5001/api/predict-next-month-bill', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        previousBill,
+        currentBalance,
+        currentMonthBill
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      setNextMonthPrediction(data.nextMonthPrediction);
+      setFeedbackMessage(data.feedbackMessage);
+    })
+    .catch(error => console.error('Error:', error));
+  };
+  useEffect(()=>{
+    document.title = "HOSTEL4U";
+    },[]);
 
   const navigate = useNavigate();
   useEffect(() => {
     console.log("useeffect");
+    
 
     if (localStorage.getItem("token")) {
       console.log("dothis");
@@ -1135,64 +1166,53 @@ export const Home = () => {
                     </div>
                   </div>
                 </div>
-                <h6 className="mt-6 mb-0 ml-2">{<MessDetails/>}</h6>
-          
+                <h6 className="mt-6 mb-0 ml-2">Mess Details</h6>
+                <p className="ml-2 leading-normal text-sm">
+                  <span className="font-bold">Active</span> from Mar 18, 2024
+                </p>
+
                 <div className="w-full px-6 mx-auto max-w-screen-2xl rounded-xl">
-                  <div className="flex flex-wrap mt-0 -mx-3 flex-star">
-                    <div className="flex-none w-1/4 max-w-full py-4 pl-0 pr-3 mt-0 koiv">
-                      <div className="flex mb-2 wrapping">
-                        <div className="flex items-center justify-center mr-2 text-center bg-center rounded fill-current shadow-soft-2xl bg-gradient-to-tl from-purple-700 to-pink-500 text-neutral-900 wrem">
-                          <FoodBankRoundedIcon
-                            sx={{ fontSize: 20, color: "white" }}
-                          />
-                        </div>
-                        <p className="mt-1 mb-0 font-semibold leading-tight text-xs">
-                          Last
-                        </p>
-                      </div>
-                      <h4 className="font-rs">&#8377;4K</h4>
+                <form onSubmit={handleFormSubmit}>
+                  <div className="flex flex-wrap mt-4 -mx-3">
+                    <div className="flex-none w-full md:w-1/3 max-w-full py-2 px-3">
+                    <h2>Expense Tracker</h2> 
+                      <label className="block text-gray-700">Enter Previous Month Bill:</label>
+                      <input
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        type="text"
+                        value={previousBill}
+                        onChange={(e) => setPreviousBill(e.target.value)}
+                      />
                     </div>
-                    <div className="flex-none w-1/4 max-w-full py-4 pl-0 pr-3 mt-0 koiv">
-                      <div className="flex mb-2 wrapping">
-                        <div className="flex items-center justify-center mr-2 text-center bg-center rounded fill-current shadow-soft-2xl bg-gradient-to-tl from-blue-600 to-cyan-400 text-neutral-900 wrem">
-                          <AccountBalanceWalletRoundedIcon
-                            sx={{ fontSize: 20, color: "white" }}
-                          />
-                        </div>
-                        <p className="mt-1 mb-0 font-semibold leading-tight text-xs">
-                          Used
-                        </p>
-                      </div>
-                      <h4 className="font-rs"> &#8377;14K</h4>
+                    <div className="flex-none w-full md:w-1/3 max-w-full py-2 px-3">
+                      <label className="block text-gray-700">Enter Current Month Bill:</label>
+                      <input
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        type="text"
+                        value={currentMonthBill}
+                        onChange={(e) => setCurrentMonthBill(e.target.value)}
+                      />
                     </div>
-                    <div className="flex-none w-1/4 max-w-full py-4 pl-0 pr-3 mt-0 koiv">
-                      <div className="flex mb-2 wrapping">
-                        <div className="flex items-center justify-center mr-2 text-center bg-center rounded fill-current shadow-soft-2xl bg-gradient-to-tl from-red-500 to-yellow-400 text-neutral-900 wrem">
-                          <AccountBalanceRoundedIcon
-                            sx={{ fontSize: 20, color: "white" }}
-                          />
-                        </div>
-                        <p className="mt-1 mb-0 font-semibold leading-tight text-xs">
-                          Left
-                        </p>
-                      </div>
-                      <h4 className="font-rs">&#8377;10.5K</h4>
-                    </div>
-                    <div className="flex-none w-1/4 max-w-full py-4 pl-0 pr-3 mt-0 koiv">
-                      <div className="flex mb-2 wrapping ">
-                        <div className="flex items-center justify-center mr-2 text-center bg-center rounded fill-current shadow-soft-2xl bg-gradient-to-tl from-red-600 to-rose-400 text-neutral-900 wrem">
-                          <PriceChangeRoundedIcon
-                            sx={{ fontSize: 20, color: "white" }}
-                          />
-                        </div>
-                        <p className="mt-1 mb-0 font-semibold leading-tight text-xs">
-                          Total
-                        </p>
-                      </div>
-                      <h4 className="font-rs">&#8377;24.5K</h4>
-                    </div>
+                    <div className="flex-none w-full md:w-1/3 max-w-full py-2 px-3">
+                    <button className=" bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded mt-8 md:mt-0" type="submit">
+                      Get Prediction
+                    </button>
                   </div>
+                  
+                  </div>
+                </form>
+              
+                <div className="mt-4">
+                  {nextMonthPrediction && (
+                    <div>
+                      <p>Next Month's Bill Prediction: {nextMonthPrediction}</p>
+                      <p>Feedback: {feedbackMessage}</p>
+                    </div>
+                  )}
                 </div>
+              </div>
+              
+            
               </div>
             </div>
           </div>

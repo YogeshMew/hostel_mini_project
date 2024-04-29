@@ -4,6 +4,9 @@
 /* justify-content: center; */
 }
 
+.btn{
+background-color:color !important;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
